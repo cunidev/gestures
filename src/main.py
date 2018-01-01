@@ -220,7 +220,6 @@ class MainWindow(Gtk.Window):
   		popoverBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, margin = 15)
 		label = Gtk.Label()
   		label.set_markup("<b>Gestures</b> "+appVersion+"\n\n")
-
     		button = Gtk.Button("Restore backup configuration", margin = 10)
       		button.connect("clicked", self.restoreBackup)
 
@@ -228,7 +227,6 @@ class MainWindow(Gtk.Window):
 		popoverBox.add(label)
   		popoverBox.add(button)
 		self.menuPopover.add(popoverBox)
-  		self.menuPopover.show_all()
 
          	button = Gtk.Button()
         	icon = Gio.ThemedIcon(name="list-add")
@@ -320,6 +318,17 @@ class MainWindow(Gtk.Window):
 		for child in self.listbox.get_children():
 			child.destroy()
 
+		if(len(self.confFile.gestures) == 0):
+      			label = Gtk.Label()
+       			label.set_markup("<big><big>No gestures.</big></big>")
+          		#box = Gtk.Box()
+          		box = Gtk.ListBoxRow(margin=150)
+            		box.add(label)
+       			# self.listbox.set_placeholder(box)
+       			self.listbox.add(box)
+
+          		# TODO: fix (ugly and temporary!)
+
      		for i, gesture in enumerate(self.confFile.gestures):
 
 			row = Gtk.ListBoxRow(margin = 5)
@@ -389,8 +398,17 @@ class MainWindow(Gtk.Window):
 # begin
 win = MainWindow()
 
+
 try:
 	confFile = ConfigFileHandler()
+ 	if(confFile.createFileIfNotExisting()):
+      		print 1
+      		dialog = Gtk.MessageDialog(win, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Configuration file not found")
+       		dialog.format_secondary_text("Don't panic: an empty configuration file has just been generated.")
+          	dialog.run()
+          	dialog.destroy()
+
+     	confFile.openFile()
  	if not(confFile.isValid()):
       		if (confFile.backup()):
               		dialog = Gtk.MessageDialog(win, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "The current configuration file hasn't been created with this tool.")
@@ -416,6 +434,7 @@ except:
 
 # load file
 win.setConfFile(confFile)
+win.set_position(Gtk.WindowPosition.CENTER)
 win.populate()
 
 win.connect("delete-event", Gtk.main_quit)

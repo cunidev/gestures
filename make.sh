@@ -1,3 +1,4 @@
+rm -rf build
 cd src
 zip -r ../Gestures.zip *
 cd ..
