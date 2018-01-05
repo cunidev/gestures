@@ -2,7 +2,7 @@
 Version=1.0
 Name=Gestures
 Comment=
-Exec=/opt/gestures/Gestures_0.1
+Exec=/opt/gestures/gestures
 Path=/opt/gestures
 Icon=/opt/gestures/icon.svg
 Terminal=false

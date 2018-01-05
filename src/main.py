@@ -85,8 +85,6 @@ class EditDialog(Gtk.Dialog):
             self.curGesture.direction == "clockwise"))
         self.buttonDirection4.set_active((self.curGesture.direction == "right") or (
             self.curGesture.direction == "anticlockwise"))
-        # SET LABELS
-        self.setDirectionLabels(self.curGesture.type)
 
         hbox = Gtk.Box(spacing=5)
         box.add(hbox)
@@ -156,8 +154,13 @@ class EditDialog(Gtk.Dialog):
 
         confirmButton.connect("clicked", self.onConfirm, i)
         cancelButton.connect("clicked", self.onCancel)
-
+        
         self.show_all()
+        
+        # SET LABELS - after show_all because of set_visible()
+        self.setFingerRadios(self.curGesture.type)
+        self.setDirectionLabels(self.curGesture.type)
+
 
     def setDirectionLabels(self, type):
         if(type == "pinch"):
@@ -175,7 +178,17 @@ class EditDialog(Gtk.Dialog):
         self.curGesture.type = type
 
         self.setDirectionLabels(type)  # needed after changing type
+        self.setFingerRadios(type)
         self.correctDirections()
+
+    def setFingerRadios(self, type):
+        if(type == "pinch"):
+            self.buttonFinger2.set_visible(True)
+        else:
+            if(self.buttonFinger2.get_active() == True):
+			    self.buttonFinger3.set_active(True)
+			    
+            self.buttonFinger2.set_visible(False)
 
     def correctDirections(self):
         if(self.buttonDirection2.get_active()):

@@ -1,10 +1,16 @@
+if [[ $EUID = 0 ]]; then
+   echo "Warning: This script shouldn't be run as root!"
+   echo
+fi
+
 rm -rf build
 cd src
 zip -r ../Gestures.zip *
 cd ..
-echo '#!/usr/bin/env python' | cat - Gestures.zip > Gestures_0.1
+echo '#!/usr/bin/env python' | cat - Gestures.zip > gestures
 rm Gestures.zip
-chmod +x Gestures_0.1
+chmod +x gestures
 mkdir build
-mv Gestures_0.1 build/
+mv gestures build/
 cp gestures.desktop build/
+
