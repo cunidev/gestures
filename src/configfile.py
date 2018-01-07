@@ -26,7 +26,7 @@ class ConfigFileHandler:
 
     def openFile(self):
         self.validSupportedRegex = re.compile(
-            "^\s*(#D:\s)?gesture\s((swipe)\s(up|down|left|right)\s([3-4]\s)?|(pinch\s(in|out|clockwise|anticlockwise)\s([2-4]\s)?))\s*[a-z](.+)")
+            "^\s*(#D:\s)?gesture\s((swipe)\s(up|down|left|right)\s([3-4]\s)?|(pinch\s(in|out|clockwise|anticlockwise)\s([2-4]\s)?))\s*(.+)")
         self.validUnsupportedRegex = re.compile("^\s*device\s")
 
         try:
