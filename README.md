@@ -16,8 +16,9 @@ alt="IMAGE ALT TEXT HERE" width="480" height="360" border="10" /></a>
 - Python 3 with `gi` module
 - xdotool
 - libinput-gestures
+- libinput-tools
 
 On Debian/Ubuntu, type:
-`sudo apt install xdotool python3 python-gi`
+`sudo apt install xdotool python3 python-gi libinput-tools`
 
 To install libinput-gestures, follow the instructions on its official page: https://github.com/bulletmark/libinput-gestures
