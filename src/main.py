@@ -6,7 +6,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gio, Gdk
 
 global appVersion
-appVersion = "0.1 \"Buggy Beta\""
+appVersion = "0.1.1 \"Buggy Beta\""
 
 
 class EditDialog(Gtk.Dialog):
@@ -257,7 +257,7 @@ class MainWindow(Gtk.Window):
         self.set_titlebar(hb)
 
         button = Gtk.Button()
-        icon = Gio.ThemedIcon(name="open-menu")
+        icon = Gio.ThemedIcon(name="open-menu-symbolic")
         image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
         button.add(image)
         hb.pack_end(button)
@@ -276,14 +276,14 @@ class MainWindow(Gtk.Window):
         self.menuPopover.add(popoverBox)
 
         button = Gtk.Button()
-        icon = Gio.ThemedIcon(name="list-add")
+        icon = Gio.ThemedIcon(name="list-add-symbolic")
         image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
         button.add(image)
         button.connect("clicked", self.onAdd)
         hb.pack_start(button)
 
         button = Gtk.ToggleButton()
-        icon = Gio.ThemedIcon(name="document-edit")
+        icon = Gio.ThemedIcon(name="document-edit-symbolic")
         image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
         button.add(image)
         button.connect("clicked", self.onEditMode)
@@ -408,12 +408,12 @@ class MainWindow(Gtk.Window):
 
             if(self.editMode):
                 deleteButton = Gtk.Button()
-                icon = Gio.ThemedIcon(name="edit-delete")
+                icon = Gio.ThemedIcon(name="edit-delete-symbolic")
                 image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
                 deleteButton.add(image)
 
                 editButton = Gtk.Button()
-                icon = Gio.ThemedIcon(name="document-edit")
+                icon = Gio.ThemedIcon(name="document-edit-symbolic")
                 image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
                 editButton.add(image)
 
