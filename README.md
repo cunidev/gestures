@@ -1,5 +1,5 @@
-# Gestures 0.1
-This software is NOT ready for release yet!
+# Gestures
+A minimal Gtk+ GUI app for libinput-gestures
 
 Use:
 - `./make.sh` to make an executable in /build
