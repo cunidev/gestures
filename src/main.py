@@ -6,7 +6,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gio, Gdk
 
 global appVersion
-appVersion = "0.1.1 \"Buggy Beta\""
+appVersion = "0.1.2"
 
 
 class EditDialog(Gtk.Dialog):
@@ -155,6 +155,9 @@ class EditDialog(Gtk.Dialog):
         confirmButton.connect("clicked", self.onConfirm, i)
         cancelButton.connect("clicked", self.onCancel)
         
+        confirmButton.set_can_default(True)
+        confirmButton.grab_default()
+        
         self.show_all()
         
         # SET LABELS - after show_all because of set_visible()
@@ -229,7 +232,7 @@ class EditDialog(Gtk.Dialog):
         self.curGesture.command = widget.get_text().decode('utf-8')
 
     def onCancel(self, widget):
-        self.destroy()
+        self.response(Gtk.ResponseType.CANCEL)
 
     def onConfirm(self, widget, i):
         if(i != -1):
@@ -238,7 +241,8 @@ class EditDialog(Gtk.Dialog):
             self.confFile.gestures.append(self.curGesture)
         self.confFile.save()
         self.confFile.reloadProcess()
-        self.destroy()
+        self.response(Gtk.ResponseType.OK)
+        #self.destroy()
 
 
 class MainWindow(Gtk.Window):
@@ -264,10 +268,10 @@ class MainWindow(Gtk.Window):
         button.connect("clicked", self.showMenu)
 
         self.menuPopover = Gtk.Popover.new(button)
-        self.menuPopover.set_size_request(300, 100)
+        self.menuPopover.set_size_request(200, 100)
         popoverBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, margin=15)
-        label = Gtk.Label()
-        label.set_markup("<b>Gestures</b> " + appVersion + "\n\n")
+        label = Gtk.Label(margin=10)
+        label.set_markup("<b>Gestures</b> " + appVersion + "")
         button = Gtk.Button("Restore backup configuration", margin=10)
         button.connect("clicked", self.restoreBackup)
 
@@ -291,8 +295,8 @@ class MainWindow(Gtk.Window):
 
         # contents
 
-        self.box_outer = Gtk.Box(
-            orientation=Gtk.Orientation.VERTICAL, spacing=20)
+        self.box_outer = Gtk.ScrolledWindow()
+        self.box_outer.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         self.add(self.box_outer)
         self.listbox = Gtk.ListBox()
         self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
@@ -394,7 +398,7 @@ class MainWindow(Gtk.Window):
             hbox.pack_start(vbox, True, True, 0)
 
             label1 = Gtk.Label(xalign=0)
-            label1.set_markup("<b>" + gesture.type + " " + gesture.direction +
+            label1.set_markup("<b>" + gesture.type.title() + " " + gesture.direction +
                               "</b> <i>(" + str(gesture.fingers) + " fingers)</i>" + "")
 
             if len(gesture.command) > 74:
@@ -458,7 +462,7 @@ win = MainWindow()
 
 
 try:
-    confFile = ConfigFileHandler()
+    confFile = ConfigFileHandler(appVersion)
     if(confFile.createFileIfNotExisting()):
         dialog = Gtk.MessageDialog(
             win, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Configuration file not found")
