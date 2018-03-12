@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Name=Gestures
+Comment=
+Exec=/usr/bin/gestures
+Path=/usr/bin/gestures
+Terminal=false
+Type=Application
+Categories=Utility;
+Name[it_IT]=org.cunidev.gestures

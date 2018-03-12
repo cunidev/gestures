@@ -12,5 +12,5 @@ rm Gestures.zip
 chmod +x gestures
 mkdir build
 mv gestures build/
-cp gestures.desktop build/
+cp data/org.cunidev.gestures.desktop build/
 
