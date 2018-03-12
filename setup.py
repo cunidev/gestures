@@ -96,8 +96,8 @@ setup(
     #package_dir={'': 'src'},
     #packages=[''],
     data_files = [
-        ('share/icons/hicolor/scalable/apps', ['data/org.cunidev.gestures.svg']),
-        ('share/applications', ['data/org.cunidev.gestures.desktop'])
+        ('/usr/share/icons/hicolor/scalable/apps', ['data/org.cunidev.gestures.svg']),
+        ('/usr/share/applications', ['data/org.cunidev.gestures.desktop'])
     ],
     
     packages=find_packages(exclude=('tests',)),
