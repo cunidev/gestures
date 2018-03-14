@@ -5,8 +5,9 @@ from gesture import Gesture
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gio, Gdk
 
-global appVersion
-appVersion = "0.1.2"
+global __version__
+__version__ = "0.1.2"
+
 
 
 class EditDialog(Gtk.Dialog):
@@ -189,7 +190,7 @@ class EditDialog(Gtk.Dialog):
             self.buttonFinger2.set_visible(True)
         else:
             if(self.buttonFinger2.get_active() == True):
-			    self.buttonFinger3.set_active(True)
+                self.buttonFinger3.set_active(True)
 			    
             self.buttonFinger2.set_visible(False)
 
@@ -271,7 +272,7 @@ class MainWindow(Gtk.Window):
         self.menuPopover.set_size_request(200, 100)
         popoverBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, margin=15)
         label = Gtk.Label(margin=10)
-        label.set_markup("<b>Gestures</b> " + appVersion + "")
+        label.set_markup("<b>Gestures</b> " + __version__ + "")
         button = Gtk.Button("Restore backup configuration", margin=10)
         button.connect("clicked", self.restoreBackup)
 
@@ -462,7 +463,7 @@ win = MainWindow()
 
 
 try:
-    confFile = ConfigFileHandler(appVersion)
+    confFile = ConfigFileHandler(__version__)
     if(confFile.createFileIfNotExisting()):
         dialog = Gtk.MessageDialog(
             win, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Configuration file not found")
