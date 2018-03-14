@@ -2,7 +2,9 @@
 A minimal Gtk+ GUI app for libinput-gestures
 
 Use:
-- `./make.sh` to make an executable in /build
+- `sudo python setup.py install` (requires `python-setuptools`)
+
+Or:
 - `sudo ./install.sh` to install in /opt/gestures
 
 
@@ -10,15 +12,15 @@ Use:
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=MrOIEoyijXM
 " target="_blank"><img src="http://img.youtube.com/vi/MrOIEoyijXM/0.jpg" 
-alt="IMAGE ALT TEXT HERE" width="480" height="360" border="10" /></a>
+alt="(click to open video)" width="480" height="360" border="10" /></a>
 
 ## Dependencies:
-- Python 3 with `gi` module
+- Python 2 with `gi` module
 - xdotool
 - libinput-gestures
 - libinput-tools
 
 On Debian/Ubuntu, type:
-`sudo apt install xdotool python3 python-gi libinput-tools`
+`sudo apt install xdotool python-setuptools python-gi libinput-tools`
 
 To install libinput-gestures, follow the instructions on its official page: https://github.com/bulletmark/libinput-gestures
