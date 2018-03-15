@@ -1,6 +1,6 @@
 ./make.sh
 
-sudo mkdir /opt/gestures
-sudo cp ./build/gestures /opt/gestures/
-sudo cp ./build/gestures.desktop /usr/share/applications/
-sudo cp ./gestures-temporary.svg /opt/gestures/gestures.svg
+mkdir /opt/gestures
+cp ./build/gestures /opt/gestures/
+cp ./build/org.cunidev.gestures.desktop /usr/share/applications/
+cp ./data/org.cunidev.gestures.svg /usr/share/icons/hicolor/scalable/apps
