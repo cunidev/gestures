@@ -6,7 +6,16 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gio, Gdk
 from __version__ import __version__
 
-
+class ErrorDialog(Gtk.Dialog):
+    def __init__(self,parent):
+	    pass
+    def showNotInstalledError(self,win):
+        dialog = Gtk.MessageDialog(
+            win, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "Can't load libinput-gestures")
+        dialog.format_secondary_text(
+            "Make sure it is correctly installed. The configuration file has been saved anyway.")
+        dialog.run()
+        dialog.destroy()
 
 class EditDialog(Gtk.Dialog):
     def __init__(self, parent, confFile, i=-1):
@@ -228,7 +237,7 @@ class EditDialog(Gtk.Dialog):
         self.curGesture.fingers = finger
 
     def onCommandChange(self, widget):
-        self.curGesture.command = widget.get_text().decode('utf-8')
+        self.curGesture.command = widget.get_text()
 
     def onCancel(self, widget):
         self.response(Gtk.ResponseType.CANCEL)
@@ -239,9 +248,13 @@ class EditDialog(Gtk.Dialog):
         else:
             self.confFile.gestures.append(self.curGesture)
         self.confFile.save()
-        self.confFile.reloadProcess()
+        try:
+            self.confFile.reloadProcess()
+        except:
+            err = ErrorDialog(self)
+            err.showNotInstalledError(win)
+        
         self.response(Gtk.ResponseType.OK)
-        #self.destroy()
 
 
 class MainWindow(Gtk.Window):
@@ -448,12 +461,16 @@ class MainWindow(Gtk.Window):
         try:
             self.confFile.reloadProcess()
         except:
-            dialog = Gtk.MessageDialog(
+            err = ErrorDialog(self)
+            err.showNotInstalledError(win)
+            
+    def showNotInstalledError(self,win):
+        dialog = Gtk.MessageDialog(
                 win, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "Can't load libinput-gestures")
-            dialog.format_secondary_text(
-                "Make sure it is correctly installed. The configuration file has been saved anyway.")
-            dialog.run()
-            dialog.destroy()
+        dialog.format_secondary_text(
+            "Make sure it is correctly installed. The configuration file has been saved anyway.")
+        dialog.run()
+        dialog.destroy()
 
 
 # begin
@@ -469,7 +486,7 @@ try:
             "Don't panic: an empty configuration file has just been generated.")
         dialog.run()
         dialog.destroy()
-
+    
     confFile.openFile()
     if not(confFile.isValid()):
         if (confFile.backup()):
@@ -504,6 +521,12 @@ except:
 win.setConfFile(confFile)
 win.set_position(Gtk.WindowPosition.CENTER)
 win.populate()
+
+try:
+    self.confFile.reloadProcess()
+except:
+    err = ErrorDialog(win)
+    err.showNotInstalledError(win)
 
 win.connect("delete-event", Gtk.main_quit)
 win.show_all()
