@@ -29,7 +29,6 @@ class ConfigFileHandler:
         self.validSupportedRegex = re.compile(
             "^\s*(#D:\s)?gesture\s((swipe)\s(up|down|left|right)\s([3-4]\s)?|(pinch\s(in|out|clockwise|anticlockwise)\s([2-4]\s)?))\s*(.+)")
         self.validUnsupportedRegex = re.compile("^\s*device\s")
-
         try:
             self.file = open(self.filePath, "r+")
         except:
@@ -61,7 +60,7 @@ class ConfigFileHandler:
                 type = line[1]
                 direction = line[2]
 
-                if(unicode(line[3], 'utf-8').isnumeric()):
+                if(line[3].isnumeric()):
                     fingers = line[3]
                     command = ' '.join(line[4:])
 
@@ -91,7 +90,7 @@ class ConfigFileHandler:
             print("Restarting process (in background)...")
             Popen(["libinput-gestures-setup", "restart"], shell=False)
             print("Process restarted!")
-        except Exception as e:
+        except:
             raise Exception("err_exec")
 
     def save(self):
