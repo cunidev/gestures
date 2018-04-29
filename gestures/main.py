@@ -473,61 +473,61 @@ class MainWindow(Gtk.Window):
         dialog.destroy()
 
 
-# begin
-win = MainWindow()
-
-
-try:
-    confFile = ConfigFileHandler(__version__)
-    if(confFile.createFileIfNotExisting()):
+class main():
+    win = MainWindow()
+    
+    
+    try:
+        confFile = ConfigFileHandler(__version__)
+        if(confFile.createFileIfNotExisting()):
+            dialog = Gtk.MessageDialog(
+                win, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Configuration file not found")
+            dialog.format_secondary_text(
+                "Don't panic: an empty configuration file has just been generated.")
+            dialog.run()
+            dialog.destroy()
+    
+        confFile.openFile()
+        if not(confFile.isValid()):
+            if (confFile.backup()):
+                dialog = Gtk.MessageDialog(win, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
+                                           "The current configuration file hasn't been created with this tool.")
+                dialog.format_secondary_text("The old file has been backed up to " + confFile.backupPath +
+                                             ", its contents will be extracted and the conf file has been overridden.")
+                dialog.run()
+                dialog.destroy()
+                confFile.save()
+            else:
+                dialog = Gtk.MessageDialog(
+                    win, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "Invalid configuration file, can't backup!")
+                dialog.format_secondary_text(
+                    "Can't create backup file! For security reasons, this tool can't be run.")
+                dialog.run()
+                dialog.destroy()
+                sys.exit(-1)
+        else:
+            pass
+    
+    except:
         dialog = Gtk.MessageDialog(
-            win, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Configuration file not found")
+            win, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Can't open configuration file.")
         dialog.format_secondary_text(
-            "Don't panic: an empty configuration file has just been generated.")
+            "The configuration file can't be opened or created, check permissions.")
         dialog.run()
         dialog.destroy()
+        sys.exit(-1)
+
+    # load file
+    win.setConfFile(confFile)
+    win.set_position(Gtk.WindowPosition.CENTER)
+    win.populate()
     
-    confFile.openFile()
-    if not(confFile.isValid()):
-        if (confFile.backup()):
-            dialog = Gtk.MessageDialog(win, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
-                                       "The current configuration file hasn't been created with this tool.")
-            dialog.format_secondary_text("The old file has been backed up to " + confFile.backupPath +
-                                         ", its contents will be extracted and the conf file has been overridden.")
-            dialog.run()
-            dialog.destroy()
-            confFile.save()
-        else:
-            dialog = Gtk.MessageDialog(
-                win, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "Invalid configuration file, can't backup!")
-            dialog.format_secondary_text(
-                "Can't create backup file! For security reasons, this tool can't be run.")
-            dialog.run()
-            dialog.destroy()
-            sys.exit(-1)
-    else:
-        pass
+    try:
+        self.confFile.reloadProcess()
+    except:
+        err = ErrorDialog(win)
+        err.showNotInstalledError(win)
 
-except:
-    dialog = Gtk.MessageDialog(
-        win, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Can't open configuration file.")
-    dialog.format_secondary_text(
-        "The configuration file can't be opened or created, check permissions.")
-    dialog.run()
-    dialog.destroy()
-    sys.exit(-1)
-
-# load file
-win.setConfFile(confFile)
-win.set_position(Gtk.WindowPosition.CENTER)
-win.populate()
-
-try:
-    self.confFile.reloadProcess()
-except:
-    err = ErrorDialog(win)
-    err.showNotInstalledError(win)
-
-win.connect("delete-event", Gtk.main_quit)
-win.show_all()
-Gtk.main()
+    win.connect("delete-event", Gtk.main_quit)
+    win.show_all()
+    Gtk.main()
