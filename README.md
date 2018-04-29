@@ -15,12 +15,12 @@ Or:
 alt="(click to open video)" width="480" height="360" border="10" /></a>
 
 ## Dependencies:
-- Python 2 with `gi` module
+- Python 3 with `gi` module
 - xdotool
 - libinput-gestures
 - libinput-tools
 
 On Debian/Ubuntu, type:
-`sudo apt install xdotool python-setuptools python-gi libinput-tools`
+`sudo apt install python3 xdotool python3-setuptools python3-gi libinput-tools python-gobject`
 
 To install libinput-gestures, follow the instructions on its official page: https://github.com/bulletmark/libinput-gestures
