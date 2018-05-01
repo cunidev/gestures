@@ -4,13 +4,12 @@ if [[ $EUID = 0 ]]; then
 fi
 
 rm -rf build
-cd src
+cd gestures
 zip -r ../Gestures.zip *
 cd ..
-echo '#!/usr/bin/env python' | cat - Gestures.zip > gestures
-rm Gestures.zip
-chmod +x gestures
 mkdir build
-mv gestures build/
+echo '#!/usr/bin/python3' | cat - Gestures.zip > build/gestures
+rm Gestures.zip
+chmod +x build/gestures
 cp data/org.cunidev.gestures.desktop build/
 
