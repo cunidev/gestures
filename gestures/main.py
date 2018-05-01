@@ -251,7 +251,7 @@ class EditDialog(Gtk.Dialog):
             self.confFile.reloadProcess()
         except:
             err = ErrorDialog(self)
-            err.showNotInstalledError(win)
+            err.showNotInstalledError(self)
         
         self.response(Gtk.ResponseType.OK)
 
@@ -362,13 +362,17 @@ class MainWindow(Gtk.Window):
 
     def onDelete(self, widget, i):
         dialog = Gtk.MessageDialog(
-            win, 0, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK_CANCEL, "Confirm deletion?")
+            self, 0, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK_CANCEL, "Confirm deletion?")
         dialog.format_secondary_text("This operation can't be undone.")
         if(dialog.run() == Gtk.ResponseType.OK):
             del self.confFile.gestures[i]
             self.confFile.save()
 
-            self.confFile.reloadProcess()
+            try:
+                self.confFile.reloadProcess()
+            except:
+                err = ErrorDialog(self)
+                err.showNotInstalledError(self)
 
         dialog.destroy()
         self.populate()
