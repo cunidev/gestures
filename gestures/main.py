@@ -1,9 +1,8 @@
-import gi
+from gi.repository import Gtk, Gio, Gdk
+
 import sys
 from configfile import ConfigFileHandler
 from gesture import Gesture
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gio, Gdk
 from __version__ import __version__
 
 class ErrorDialog(Gtk.Dialog):
