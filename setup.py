@@ -8,6 +8,7 @@ import io
 import os
 import sys
 from shutil import rmtree
+from gestures.__version__ import __version__
 
 from setuptools import find_packages, setup, Command
 
@@ -17,8 +18,8 @@ DESCRIPTION = 'A minimal Gtk+ GUI app for libinput-gestures'
 URL = 'https://github.com/cunidev/gestures'
 EMAIL = 'raffaele@board-db.org'
 AUTHOR = 'Raffaele T.'
-REQUIRES_PYTHON = '>=2.7.0'
-VERSION = '0.1.2'
+REQUIRES_PYTHON = '>=3.0'
+VERSION = __version__
 
 # What packages are required for this module to be executed?
 REQUIRED = [
@@ -105,7 +106,7 @@ setup(
     # py_modules=['mypackage'],
 
     entry_points={
-        'console_scripts': ['gestures=main'],
+        'console_scripts': ['gestures=gestures.main']
     },
     install_requires=REQUIRED,
     include_package_data=True,
@@ -115,8 +116,7 @@ setup(
         # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2 :: Only',
-        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3 :: Only',
         'Environment :: X11 Applications :: GTK'
     ],
     # $ setup.py publish support.
