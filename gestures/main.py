@@ -526,7 +526,7 @@ class main():
     win.populate()
     
     try:
-        self.confFile.reloadProcess()
+        confFile.reloadProcess()
     except:
         err = ErrorDialog(win)
         err.showNotInstalledError(win)
