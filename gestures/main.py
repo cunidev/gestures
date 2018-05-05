@@ -331,7 +331,7 @@ class MainWindow(Gtk.Window):
 
     def restoreBackup(self, button):
         self.hide()
-        dialog = Gtk.MessageDialog(win, 0, Gtk.MessageType.WARNING,
+        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.WARNING,
                                    Gtk.ButtonsType.OK_CANCEL, "Restore backup configuration?")
         dialog.format_secondary_text(
             "This operation can't be undone. The app will be closed after restoring, and all changes will be lost.")
@@ -340,7 +340,7 @@ class MainWindow(Gtk.Window):
 
                 dialog.destroy()
                 dialog = Gtk.MessageDialog(
-                    win, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Backup file restored.")
+                    self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Backup file restored.")
                 dialog.format_secondary_text(
                     "Gestures will be closed. Please remember that re-opening this app will result in overwriting the configuration file.")
                 dialog.set_modal(True)
@@ -350,7 +350,7 @@ class MainWindow(Gtk.Window):
             else:
                 dialog.destroy()
                 dialog = Gtk.MessageDialog(
-                    win, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "Can't restore backup file.")
+                    self, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "Can't restore backup file.")
                 dialog.format_secondary_text("The file might not exist.")
                 dialog.set_modal(True)
                 dialog.run()
@@ -465,7 +465,7 @@ class MainWindow(Gtk.Window):
             self.confFile.reloadProcess()
         except:
             err = ErrorDialog(self)
-            err.showNotInstalledError(win)
+            err.showNotInstalledError(self)
             
     def showNotInstalledError(self,win):
         dialog = Gtk.MessageDialog(
