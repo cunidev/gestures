@@ -2,7 +2,7 @@
 A minimal Gtk+ GUI app for libinput-gestures
 
 Use:
-- `sudo ./install.sh` to install in /opt/gestures
+- `./make.sh; sudo ./install.sh` to install in /usr/local/bin. An alternative path for the binary can be specified as parameter to `install.sh`
 
 
 ## Video demo:

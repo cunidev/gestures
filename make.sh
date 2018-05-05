@@ -1,6 +1,5 @@
-if [[ $EUID = 0 ]]; then
+if [ $(id -u) = 0 ]; then
    echo "Warning: This script shouldn't be run as root!"
-   echo
 fi
 
 rm -rf build
