@@ -13,7 +13,7 @@ else
 fi
 
 cp ./build/gestures $INSTALL/gestures
-sed -e 's~/usr/bin~$INSTALL~g' -i ./build/org.cunidev.gestures.desktop 
+sed -e 's|/usr/bin|'$INSTALL'|g' -i ./build/org.cunidev.gestures.desktop 
 cp ./build/org.cunidev.gestures.desktop /usr/share/applications/
 cp ./data/org.cunidev.gestures.svg /usr/share/icons/hicolor/scalable/apps
 
