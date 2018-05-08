@@ -480,6 +480,10 @@ class MainWindow(Gtk.Window):
 
 class main():
     win = MainWindow()
+    try:
+        win.set_icon(Gtk.IconTheme.get_default().load_icon("org.cunidev.gestures", 128, 0))
+    except:
+        print("WARNING: Can't load app icon!")
     
     
     try:
