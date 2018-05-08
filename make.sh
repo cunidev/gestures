@@ -7,7 +7,7 @@ cd gestures
 zip -r ../Gestures.zip *
 cd ..
 mkdir build
-echo '#!/usr/bin/python3' | cat - Gestures.zip > build/gestures
+echo '#!/usr/bin/env python3' | cat - Gestures.zip > build/gestures
 rm Gestures.zip
 chmod +x build/gestures
 cp data/org.cunidev.gestures.desktop build/
