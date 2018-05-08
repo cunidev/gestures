@@ -486,8 +486,10 @@ class Gestures(Gtk.Application):
 
     def on_activate(self, data=None):
         win = MainWindow()
+        self.add_window(win)
+        
         try:
-            win.set_icon(Gtk.IconTheme.get_default().load_icon("org.cunidev.gestures", 128, 0))
+            self.set_icon(Gtk.IconTheme.get_default().load_icon("org.cunidev.gestures", 128, 0))
         except:
             print("WARNING: Can't load app icon!")
         
@@ -542,13 +544,8 @@ class Gestures(Gtk.Application):
         except:
             err = ErrorDialog(win)
             err.showNotInstalledError(win)
-    
-        win.connect("delete-event", Gtk.main_quit)
+            
         win.show_all()
-        
-        self.add_window(win)
-        
-        Gtk.main()
     
     
     
