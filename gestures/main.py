@@ -3,6 +3,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gio, Gdk
 
 import sys
+from os.path import expanduser
 from configfile import ConfigFileHandler
 from gesture import Gesture
 from __version__ import __version__
@@ -281,15 +282,32 @@ class MainWindow(Gtk.ApplicationWindow):
         button.connect("clicked", self.showMenu)
 
         self.menuPopover = Gtk.Popover.new(button)
-        self.menuPopover.set_size_request(200, 100)
-        popoverBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, margin=15)
-        label = Gtk.Label(margin=10)
-        label.set_markup("<b>Gestures</b> " + __version__ + "")
-        button = Gtk.Button("Restore backup configuration", margin=10)
-        button.connect("clicked", self.restoreBackup)
-
+        self.menuPopover.set_size_request(250, 100)
+        popoverBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        label = Gtk.Label(margin=12)
+        label.set_markup("<b>Gestures</b> " + __version__)
+        
+        
+        btnImport = Gtk.Button.new_from_icon_name("document-open", Gtk.IconSize.SMALL_TOOLBAR)
+        btnImport.set_property("tooltip-text", "Import")
+        btnImport.connect("clicked", self.importFile)
+        
+        btnExport = Gtk.Button.new_from_icon_name("document-save", Gtk.IconSize.SMALL_TOOLBAR)
+        btnExport.set_property("tooltip-text", "Export")
+        btnExport.connect("clicked", self.exportFile)
+        
+        btnRestore = Gtk.Button.new_from_icon_name("document-revert", Gtk.IconSize.SMALL_TOOLBAR)
+        btnRestore.set_property("tooltip-text", "Restore backup")
+        btnRestore.connect("clicked", self.restoreBackup)
+        
+        btnBox = Gtk.ButtonBox(orientation=Gtk.Orientation.HORIZONTAL, margin=12)
+        btnBox.set_layout(Gtk.ButtonBoxStyle.EXPAND)
+        btnBox.add(btnImport)
+        btnBox.add(btnExport)
+        btnBox.add(btnRestore)
+        
         popoverBox.add(label)
-        popoverBox.add(button)
+        popoverBox.add(btnBox)
         self.menuPopover.add(popoverBox)
 
         button = Gtk.Button()
@@ -331,6 +349,103 @@ class MainWindow(Gtk.ApplicationWindow):
         editDialog.destroy()
         self.populate()
 
+    def importFile(self, button):
+        dialog = Gtk.FileChooserDialog("Import profile", self, Gtk.FileChooserAction.OPEN, 
+                                                  (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                                                    Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+        dialog.set_current_folder(expanduser("~"))
+        dialog.set_default_response(Gtk.ResponseType.OK)
+        
+        filter = Gtk.FileFilter() 
+        filter.set_name(".conf files") 
+        filter.add_pattern("*.conf")
+        dialog.add_filter(filter)
+        
+        filter = Gtk.FileFilter()
+        filter.set_name("All files") 
+        filter.add_pattern("*")
+        dialog.add_filter(filter) 
+        
+        response = dialog.run()
+        
+        if response == Gtk.ResponseType.OK:
+            path = dialog.get_filename()
+            dialog.destroy()
+            
+            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.WARNING,
+                                   Gtk.ButtonsType.OK_CANCEL, "Overwrite current profile?")
+            dialog.format_secondary_text("This operation can't be undone. Make sure you export your current profile first!")
+            if(dialog.run() == Gtk.ResponseType.OK):
+                if(self.confFile.importFile(path)):
+                    dialog.destroy()
+                    dialog = Gtk.MessageDialog(
+                        self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Profile imported")
+                    dialog.format_secondary_text(
+                        "Please re-open Gestures for changes to take effect")
+                    dialog.set_modal(True)
+                    dialog.run()
+                    dialog.destroy()
+                    sys.exit(0)
+                else:
+                    dialog.destroy()
+                    dialog = Gtk.MessageDialog(
+                        self, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "Can't import profile")
+                    dialog.format_secondary_text(
+                        "Please check permissions")
+                    dialog.set_modal(True)
+                    dialog.run()
+                    dialog.destroy()
+            else:
+                    dialog.destroy()
+            
+        elif response == Gtk.ResponseType.CANCEL:
+            dialog.destroy()
+        
+    def exportFile(self, button):
+        dialog = Gtk.FileChooserDialog("Save as", self, Gtk.FileChooserAction.SAVE, 
+                                                  (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                                                    Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
+        dialog.set_current_name("Gestures.conf")
+        dialog.set_current_folder(expanduser("~"))
+        dialog.set_default_response(Gtk.ResponseType.OK) 
+        dialog.set_do_overwrite_confirmation(True)
+        
+        filter = Gtk.FileFilter() 
+        filter.set_name(".conf files") 
+        filter.add_pattern("*.conf")
+        dialog.add_filter(filter)
+        
+        filter = Gtk.FileFilter()
+        filter.set_name("All files") 
+        filter.add_pattern("*")
+        dialog.add_filter(filter) 
+        
+        response = dialog.run()
+        
+        if response == Gtk.ResponseType.OK:
+            path = dialog.get_filename()
+            if(self.confFile.exportFile(path)):
+                dialog.destroy()
+                dialog = Gtk.MessageDialog(
+                    self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Profile exported")
+                dialog.format_secondary_text(
+                    "You can find it at "+path)
+                dialog.set_modal(True)
+                dialog.run()
+                dialog.destroy()
+            else:
+                dialog.destroy()
+                dialog = Gtk.MessageDialog(
+                    self, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "Can't export profile")
+                dialog.format_secondary_text(
+                    "Please check permissions for selected folder")
+                dialog.set_modal(True)
+                dialog.run()
+                dialog.destroy()
+            
+        elif response == Gtk.ResponseType.CANCEL:
+            dialog.destroy()
+    
     def restoreBackup(self, button):
         self.hide()
         dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.WARNING,
@@ -495,7 +610,7 @@ class Gestures(Gtk.Application):
         
         
         try:
-            confFile = ConfigFileHandler(__version__)
+            confFile = ConfigFileHandler(expanduser("~"), __version__)
             if(confFile.createFileIfNotExisting()):
                 dialog = Gtk.MessageDialog(
                     win, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Configuration file not found")
@@ -527,7 +642,7 @@ class Gestures(Gtk.Application):
         
         except:
             dialog = Gtk.MessageDialog(
-                win, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Can't open configuration file.")
+                win, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "Can't open configuration file.")
             dialog.format_secondary_text(
                 "The configuration file can't be opened or created, check permissions.")
             dialog.run()
