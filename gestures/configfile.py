@@ -107,7 +107,7 @@ class ConfigFileHandler:
         self.reloadFile()
 
     def backup(self):
-        return exportFile(self.backupPath)
+        return self.exportFile(self.backupPath)
 
     def restore(self):
         try:
