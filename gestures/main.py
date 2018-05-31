@@ -265,7 +265,7 @@ class MainWindow(Gtk.ApplicationWindow):
         self.editMode = False
         # window
         Gtk.Window.__init__(self, title="Gestures")
-        self.set_border_width(10)
+        self.set_border_width(15)
         self.set_default_size(600, 400)
 
         # header bar
@@ -284,8 +284,10 @@ class MainWindow(Gtk.ApplicationWindow):
         self.menuPopover = Gtk.Popover.new(button)
         self.menuPopover.set_size_request(250, 100)
         popoverBox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        
         label = Gtk.Label(margin=12)
         label.set_markup("<b>Gestures</b> " + __version__)
+        popoverBox.add(label)
         
         
         btnImport = Gtk.Button.new_from_icon_name("document-open", Gtk.IconSize.SMALL_TOOLBAR)
@@ -306,7 +308,6 @@ class MainWindow(Gtk.ApplicationWindow):
         btnBox.add(btnExport)
         btnBox.add(btnRestore)
         
-        popoverBox.add(label)
         popoverBox.add(btnBox)
         self.menuPopover.add(popoverBox)
 
