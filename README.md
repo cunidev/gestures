@@ -1,6 +1,7 @@
 # Gestures (moved to GitLab)
+We've MOVED to GitLab: https://gitlab.com/cunidev/gestures
+
 A minimal Gtk+ GUI app for libinput-gestures
-New link: https://gitlab.com/cunidev/gestures
 
 Use:
 - `./make.sh; sudo ./install.sh` to install in /usr/local/bin. An alternative path for the binary can be specified as parameter to `install.sh`
